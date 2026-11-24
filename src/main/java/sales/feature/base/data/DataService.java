@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import sales.feature.supplier.SupplierRepository;
 
 /**
  * Provides access to data repositories that connect to the underlying database
@@ -30,12 +31,17 @@ public class DataService {
      * The Category repository
      */
     private final CategoryRepository categoryRepository;
+    /**
+     * The Supplier repository
+     */
+    private final SupplierRepository supplierRepository;
 
     public DataService(String connectionString) throws DataAccessException {
         try {
             this.connection = DriverManager.getConnection(connectionString);
             this.productRepository = new ProductRepository(connection);
             this.categoryRepository = new CategoryRepository(connection);
+            this.supplierRepository = new SupplierRepository(connection);
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Could not connect to database.", e);
             throw new DataAccessException("Could not connect to database.", e);
@@ -62,4 +68,6 @@ public class DataService {
     public CategoryRepository getCategoryRepository() {
         return categoryRepository;
     }
+
+    public SupplierRepository getSupplierRepository() {return supplierRepository; }
 }

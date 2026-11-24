@@ -38,12 +38,14 @@ public class LayoutManager implements MainWindow {
      * @param onNewCategoryClicked The function to call when the New Category menu item is clicked
      * @param onViewProductsClicked The function to call when the Products menu item is clicked
      * @param onViewCategoriesClicked The function to call when the Categories menu item is clicked
+     * @param onViewSuppliersClicked The function to call when the Suppliers menu item is clicked
      */
     public void init(Stage primaryStage,
-                         Runnable onNewProductClicked,
-                         Runnable onNewCategoryClicked,
-                         Runnable onViewProductsClicked,
-                         Runnable onViewCategoriesClicked
+                     Runnable onNewProductClicked,
+                     Runnable onNewCategoryClicked,
+                     Runnable onViewProductsClicked,
+                     Runnable onViewCategoriesClicked,
+                     Runnable onViewSuppliersClicked
     ) {
         this.primaryStage = primaryStage;
 
@@ -69,8 +71,10 @@ public class LayoutManager implements MainWindow {
         productsItem.setOnAction(_ -> onViewProductsClicked.run());
         MenuItem categoriesItem = new MenuItem("Categories");
         categoriesItem.setOnAction(_ -> onViewCategoriesClicked.run());
+        MenuItem suppliersItem = new MenuItem("Suppliers");
+        suppliersItem.setOnAction(_ -> onViewSuppliersClicked.run());
 
-        viewMenu.getItems().addAll(productsItem, categoriesItem);
+        viewMenu.getItems().addAll(productsItem, categoriesItem, suppliersItem);
 
         var menuBar = new MenuBar();
         menuBar.getMenus().addAll(fileMenu, viewMenu);

@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import sales.feature.category.CategoryController;
 import sales.feature.product.ProductController;
 import sales.feature.base.data.DataService;
+import sales.feature.supplier.SupplierController;
 
 /**
  * The main JavaFX application class that hooks our program into the JavaFX system.
@@ -28,20 +29,26 @@ public class SalesApp extends Application {
 
         try {
 
+
             this.dataService = new DataService("jdbc:sqlite:northwind.db");
+
             var productRepo = dataService.getProductRepository();
             var categoryRepo = dataService.getCategoryRepository();
+            var supplierRepo = dataService.getSupplierRepository();
 
             var layoutManager = new LayoutManager();
             var productController = new ProductController(layoutManager, productRepo, categoryRepo);
             var categoryController = new CategoryController(layoutManager, categoryRepo);
+            var supplierController = new SupplierController(layoutManager, supplierRepo);
 
             layoutManager.init(primaryStage,
                     productController::showNewProduct,
                     categoryController::showNewCategory,
                     productController::showProducts,
-                    categoryController::showCategories
+                    categoryController::showCategories,
+                    supplierController::showSuppliers
             );
+
         } catch (Exception e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
