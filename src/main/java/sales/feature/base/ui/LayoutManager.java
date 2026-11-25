@@ -39,10 +39,12 @@ public class LayoutManager implements MainWindow {
      * @param onViewProductsClicked The function to call when the Products menu item is clicked
      * @param onViewCategoriesClicked The function to call when the Categories menu item is clicked
      * @param onViewSuppliersClicked The function to call when the Suppliers menu item is clicked
+     * @param onNewSupplierClicked The function to call when the New Supplier menu item is clicked
      */
     public void init(Stage primaryStage,
                      Runnable onNewProductClicked,
                      Runnable onNewCategoryClicked,
+                     Runnable onNewSupplierClicked,
                      Runnable onViewProductsClicked,
                      Runnable onViewCategoriesClicked,
                      Runnable onViewSuppliersClicked
@@ -59,7 +61,10 @@ public class LayoutManager implements MainWindow {
         newProductItem.setOnAction(_ -> onNewProductClicked.run());
         MenuItem newCategoryItem = new MenuItem("Category");
         newCategoryItem.setOnAction(_ -> onNewCategoryClicked.run());
-        newMenu.getItems().addAll(newProductItem, newCategoryItem);
+        MenuItem newSupplierItem = new MenuItem("Supplier");
+        newSupplierItem.setOnAction(_ -> onNewSupplierClicked.run());
+
+        newMenu.getItems().addAll(newProductItem, newCategoryItem, newSupplierItem);
 
         MenuItem exitItem = new MenuItem("Exit");
         exitItem.setOnAction(_ -> javafx.application.Platform.exit());

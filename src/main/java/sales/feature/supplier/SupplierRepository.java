@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 
 import sales.feature.base.data.BaseRepository;
 import sales.feature.base.data.DataAccessException;
+import sales.feature.supplier.validation.SupplierData;
 
 public class SupplierRepository extends BaseRepository {
 
@@ -86,4 +87,117 @@ public class SupplierRepository extends BaseRepository {
             throw new DataAccessException("Error getting product count", e);
         }
     }
+
+    /**
+     * Create a new supplier row for the given validated supplier data.
+     * @param s The validated supplier data
+     * @return The created Supplier with its new id
+     * @throws DataAccessException If an SQLException occurs
+     */
+    public Supplier create(SupplierData.Validated s) throws DataAccessException {
+
+        try {
+            var statement = connection.prepareStatement(
+                    """
+                        INSERT INTO Suppliers(
+                            CompanyName,
+                            ContactName,
+                            ContactTitle,
+                            Phone
+                        ) VALUES (?, ?, ?, ?)
+                        """
+            );
+
+            statement.setString(1, s.companyName());
+            statement.setString(2, s.contactName());
+            statement.setString(3, s.contactTitle());
+            statement.setString(4, s.phone());
+
+            statement.execute();
+
+            return new Supplier(
+                    getLastInsertId(),
+                    s.companyName(),
+                    s.contactName(),
+                    s.contactTitle(),
+                    s.phone()
+            );
+
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error creating supplier", e);
+            throw new DataAccessException("Error creating supplier", e);
+        }
+
+    }
+
+    /**
+     * Updates a supplier with the given validated data.
+     * @param supplierId The id of the supplier to update
+     * @param s The validated supplier data
+     * @return The updated Supplier data
+     * @throws DataAccessException If an SQLException occurs
+     */
+    public Supplier update(int supplierId, SupplierData.Validated s)
+            throws DataAccessException {
+
+        try {
+            var statement = connection.prepareStatement(
+                    """
+                        UPDATE Suppliers
+                        SET CompanyName = ?,
+                            ContactName = ?,
+                            ContactTitle = ?,
+                            Phone = ?
+                        WHERE SupplierID = ?
+                        """
+            );
+
+            statement.setString(1, s.companyName());
+            statement.setString(2, s.contactName());
+            statement.setString(3, s.contactTitle());
+            statement.setString(4, s.phone());
+            statement.setInt(5, supplierId);
+
+            statement.executeUpdate();
+
+            return new Supplier(
+                    supplierId,
+                    s.companyName(),
+                    s.contactName(),
+                    s.contactTitle(),
+                    s.phone()
+            );
+
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error updating supplier", e);
+            throw new DataAccessException("Error updating supplier", e);
+        }
+    }
+
+    /**
+     * Delete a supplier.
+     * @param supplierId The id of the supplier to delete
+     * @throws DataAccessException If an SQLException occurs
+     */
+    public void delete(int supplierId) throws DataAccessException {
+
+        try {
+            var statement = connection.prepareStatement(
+                    """
+                        DELETE FROM Suppliers
+                        WHERE SupplierID = ?
+                        """
+            );
+
+            statement.setInt(1, supplierId);
+
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error deleting supplier", e);
+            throw new DataAccessException("Error deleting supplier", e);
+        }
+    }
+
+
 }

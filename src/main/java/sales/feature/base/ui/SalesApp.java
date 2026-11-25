@@ -44,6 +44,7 @@ public class SalesApp extends Application {
             layoutManager.init(primaryStage,
                     productController::showNewProduct,
                     categoryController::showNewCategory,
+                    supplierController::showNewSupplier,
                     productController::showProducts,
                     categoryController::showCategories,
                     supplierController::showSuppliers
